@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title>RES Cement</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#12304a"/>
+      <stop offset="100%" stop-color="#c75b2a"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="52" fill="url(#bg)"/>
+  <path d="M58 183V71h62c27 0 45 14 45 37 0 16-8 28-21 33l27 42h-35l-22-35H91v35H58zm33-61h24c11 0 17-5 17-14 0-9-6-13-17-13H91v27z" fill="#f7f1e8"/>
+  <path d="M180 81h22l-39 102h-22l39-102z" fill="#f7f1e8"/>
+</svg>
