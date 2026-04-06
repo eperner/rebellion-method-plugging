@@ -65,6 +65,10 @@ function parseNumberOrEmpty(value: string): number | "" {
   return Number.isFinite(parsed) ? parsed : "";
 }
 
+function isPartialDecimal(value: string): boolean {
+  return /^-?\d+\.$/.test(value) || value === "." || value === "-" || value === "-.";
+}
+
 function emptyTubingSegment(): MixedSegment {
   return { lengthFt: "", innerDiameterIn: "", outerDiameterIn: "" };
 }
@@ -590,7 +594,7 @@ function MixedStringEditor(props: {
       {props.segments.length === 0 && <p className="empty-state">No override segments added.</p>}
       {props.segments.map((segment, index) => (
         <div className="segment-row" key={`${props.label}-${index}`}>
-          <NumberField
+          <DecimalField
             label="Length ft"
             value={segment.lengthFt}
             onChange={(value) =>
@@ -601,7 +605,7 @@ function MixedStringEditor(props: {
               )
             }
           />
-          <NumberField
+          <DecimalField
             label="Inner diameter in"
             value={segment.innerDiameterIn}
             onChange={(value) =>
@@ -613,7 +617,7 @@ function MixedStringEditor(props: {
             }
           />
           {props.showOuterDiameter && (
-            <NumberField
+            <DecimalField
               label="Outer diameter in"
               value={segment.outerDiameterIn ?? ""}
               onChange={(value) =>
@@ -731,6 +735,62 @@ function NumberField(props: {
         inputMode="decimal"
         value={props.value}
         onChange={(event) => props.onChange(parseNumberOrEmpty(event.target.value))}
+      />
+    </label>
+  );
+}
+
+function DecimalField(props: {
+  label: string;
+  value: number | "";
+  onChange: (value: number | "") => void;
+}) {
+  const [textValue, setTextValue] = useState<string>(props.value === "" ? "" : String(props.value));
+
+  useEffect(() => {
+    setTextValue(props.value === "" ? "" : String(props.value));
+  }, [props.value]);
+
+  return (
+    <label className="field">
+      <span>{props.label}</span>
+      <input
+        inputMode="decimal"
+        value={textValue}
+        onChange={(event) => {
+          const nextText = event.target.value;
+          setTextValue(nextText);
+
+          if (nextText.trim() === "") {
+            props.onChange("");
+            return;
+          }
+
+          if (isPartialDecimal(nextText)) {
+            return;
+          }
+
+          const parsed = parseNumberOrEmpty(nextText);
+          if (parsed !== "") {
+            props.onChange(parsed);
+          }
+        }}
+        onBlur={() => {
+          const parsed = parseNumberOrEmpty(textValue);
+          if (textValue.trim() === "") {
+            props.onChange("");
+            setTextValue("");
+            return;
+          }
+
+          if (parsed === "") {
+            setTextValue(props.value === "" ? "" : String(props.value));
+            return;
+          }
+
+          props.onChange(parsed);
+          setTextValue(String(parsed));
+        }}
       />
     </label>
   );
