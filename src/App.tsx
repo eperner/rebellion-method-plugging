@@ -757,7 +757,11 @@ function DecimalField(props: {
     <label className="field">
       <span>{props.label}</span>
       <input
+        type="text"
         inputMode="decimal"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck={false}
         value={textValue}
         onChange={(event) => {
           const nextText = event.target.value;
