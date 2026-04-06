@@ -58,15 +58,17 @@ const calculatorCards: Array<{
 ];
 
 function parseNumberOrEmpty(value: string): number | "" {
-  if (value.trim() === "") {
+  const normalized = value.trim().replace(",", ".");
+  if (normalized === "") {
     return "";
   }
-  const parsed = Number(value);
+  const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : "";
 }
 
 function isPartialDecimal(value: string): boolean {
-  return /^-?\d+\.$/.test(value) || value === "." || value === "-" || value === "-.";
+  const normalized = value.replace(",", ".");
+  return /^-?\d+\.$/.test(normalized) || normalized === "." || normalized === "-" || normalized === "-.";
 }
 
 function emptyTubingSegment(): MixedSegment {
